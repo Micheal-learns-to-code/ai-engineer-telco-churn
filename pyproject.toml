@@ -1,0 +1,26 @@
+[project]
+name = "ai-engineer"
+version = "0.1.0"
+description = "Project to practice MLOps with Telco Customer churn dataset"
+authors = [
+    {name = "ha.nguyen.prof@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas (>=2.3.3,<3.0.0)",
+    "scikit-learn (>=1.7.2,<2.0.0)",
+    "jupyterlab (>=4.4.10,<5.0.0)",
+    "pytest (>=9.0.0,<10.0.0)",
+    "matplotlib (>=3.10.7,<4.0.0)"
+]
+
+[tool.poetry]
+packages = [
+    {include = "telco_churn", from = "src" },
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

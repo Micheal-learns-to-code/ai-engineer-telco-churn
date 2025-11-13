@@ -1,0 +1,68 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.installed.cfg
+pip-wheel-metadata/
+wheelhouse/
+
+# Virtual environments (including Poetry-created .venv)
+.venv/
+venv/
+ENV/
+env/
+.env
+.env.*
+
+# Caches and reports
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Installer logs
+pip-wheel-metadata/
+
+# IDE / editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints
+
+# Logs and runtime
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Misc
+*.sqlite3
+*.db
+*.db-journal
+*.env
+
+# Keep poetry.lock and pyproject.toml under version control
+# (Do not ignore poetry.lock or pyproject.toml)
