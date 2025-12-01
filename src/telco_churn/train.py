@@ -1,12 +1,30 @@
 import utils
 import pipeline
+from schemas import CustomerChurn
+from pydantic import ValidationError
 import pandas as pd
 import joblib   
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 
+def validate_rawdata(df: pd.DataFrame):
+    """Validate raw data against the schema."""
+    records = df.to_dict(orient='records')
+
+    try:        
+        [CustomerChurn(**r) for r in records]
+        print("Data validation successful! Schema is sane.")
+    except ValidationError as e:
+        print("---")
+        print("🚨 RAW DATA IS NOT SANE! Check the schema definition or the input data.")
+        # Re-raise the error to stop the script and show the detailed error traceback
+        raise e
+    return True
+
 
 df = utils.load_data('data/Telco-Customer-Churn.csv')
+
+validate_rawdata(df)
 
 #Preprocessing binary features
 df['gender'] = df['gender'].apply(lambda x: 1 if x == 'Male' else 0)
@@ -33,7 +51,6 @@ f1 = f1_score(y_test, y_pred)
 accuracy = accuracy_score(y_test, y_pred)
 precision = precision_score(y_test, y_pred)
 recall = recall_score(y_test, y_pred)
-
 print(f'F1 Score: {f1:.4f}')
 print(f'Accuracy: {accuracy:.4f}')
 print(f'Precision: {precision:.4f}')
