@@ -1,3 +1,4 @@
+import mlflow
 import utils
 import pipeline
 from schemas import CustomerChurn
@@ -41,20 +42,36 @@ df['TotalCharges'] = df['TotalCharges'].fillna(0)
 X = df.drop('Churn', axis=1)
 y = df['Churn'].apply(lambda x: 1 if x == 'Yes' else 0)
 
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
+# Add this line BEFORE mlflow.start_run() or any other MLflow call
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 
-# Train the model pipeline
-pipeline.model_pipeline.fit(X_train, y_train)
-y_pred = pipeline.model_pipeline.predict(X_test)
-f1 = f1_score(y_test, y_pred)
-accuracy = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-print(f'F1 Score: {f1:.4f}')
-print(f'Accuracy: {accuracy:.4f}')
-print(f'Precision: {precision:.4f}')
-print(f'Recall: {recall:.4f}')
+with mlflow.start_run():
+    test_size = 0.6
+    random_state = 42
+    
+    mlflow.log_param("test_size", test_size)
+    mlflow.log_param("random_state", random_state)
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
 
-# Save the trained model pipeline to a file
-joblib.dump(pipeline.model_pipeline, 'models/trained_model.joblib')
+    # Train the model pipeline
+    pipeline.model_pipeline.fit(X_train, y_train)
+    y_pred = pipeline.model_pipeline.predict(X_test)
+    f1 = f1_score(y_test, y_pred)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+
+    mlflow.log_metric("f1_score", f1)
+    mlflow.log_metric("accuracy", accuracy)
+    mlflow.log_metric("precision", precision)
+    mlflow.log_metric("recall", recall)
+
+    # print(f'F1 Score: {f1:.4f}')
+    # print(f'Accuracy: {accuracy:.4f}')
+    # print(f'Precision: {precision:.4f}')
+    # print(f'Recall: {recall:.4f}')
+
+    # Save the trained model pipeline to a file
+    mlflow.sklearn.log_model(pipeline.model_pipeline)
+    joblib.dump(pipeline.model_pipeline, 'models/trained_model.joblib')

@@ -64,5 +64,19 @@ Thumbs.db
 *.db-journal
 *.env
 
+# Machine learning artifacts
+mlartifacts/
+mlruns/
+models/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Ignore data files except for source data
+data/
+!data/Telco-Customer-Churn.csv
+
 # Keep poetry.lock and pyproject.toml under version control
 # (Do not ignore poetry.lock or pyproject.toml)
